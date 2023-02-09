@@ -1,41 +1,41 @@
-version: '2'
+version: "2"
 services:
   web:
     build: .
     environment:
-      WEBSITE_TITLE: 'Test Title'
-      WEBSITE_HOME_CONTENT: 'Test Content'
-      WEBSITE_NAV_LOGO: ''
-      WEBSITE_APP_TITLE: 'Test App Title'
-      APP_USERNAME: username
-      APP_PASSWORD: password
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USERNAME: releaseserver
-      DB_NAME: releaseserver
-      DB_PASSWORD: secret
+      WEBSITE_TITLE: "Proer Release Server"
+      WEBSITE_HOME_CONTENT: "This site is used to manage PROducitivity ManagER releases"
+      WEBSITE_NAV_LOGO: ""
+      WEBSITE_APP_TITLE: "Proer"
+      APP_USERNAME: ${STATIC_USERNAME}
+      APP_PASSWORD: ${STATIC_PASSWORD}
+      DB_HOST: ${DATABASE_HOST}
+      DB_PORT: 25060
+      DB_USERNAME: ${DATABASE_USERNAME}
+      DB_NAME: ${MAIN_DATABASE_NAME}
+      DB_PASSWORD: ${DATABASE_PASSWORD}
       # DEKs should be 32 bytes long, and cryptographically random.
       # You can generate such a key by running the following:
       #   require('crypto').randomBytes(32).toString('base64')
       # PLEASE ENSURE THAT YOU CHANGE THIS VALUE IN PRODUCTION
-      DATA_ENCRYPTION_KEY: oIh0YgyxQbShuMjw4/laYcZnGKzvC3UniWFsqL0t4Zs=
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
       # Recommended: 63 random alpha-numeric characters
       # Generate using: https://www.grc.com/passwords.htm
-      TOKEN_SECRET: change_me_in_production
-      APP_URL: 'localhost:8080'
-      ASSETS_PATH: '/usr/src/electron-release-server/releases'
+      TOKEN_SECRET: ${RANDOM_TOKEN_KEY}
+      APP_URL: "localhost:8080"
+      ASSETS_PATH: "/usr/src/electron-release-server/releases"
     depends_on:
       - db
     ports:
-      - '8080:80'
+      - "8080:80"
     entrypoint: ./scripts/wait.sh db:5432 -- npm start
     volumes:
       - ./releases:/usr/src/electron-release-server/releases
   db:
     image: postgres:11
     environment:
-      POSTGRES_PASSWORD: secret
-      POSTGRES_USER: releaseserver
+      POSTGRES_PASSWORD: ${STATIC_PASSWORD}
+      POSTGRES_USER: ${STATIC_USERNAME}
     volumes:
       - postgres:/var/lib/postgresql/data
 
